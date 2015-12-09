@@ -1,0 +1,50 @@
+package alien;
+
+import java.util.ArrayList;
+
+import utilities.Instance;
+
+public abstract class Animal {
+	protected ArrayList<Instance> _data;
+	protected Model _params;
+	
+	public Animal(ArrayList<Instance> data, Model init_params) {
+		_data = data;
+		_params = init_params;
+	}
+
+	/** Make a step of learning. */
+	public abstract void step();
+	
+	/** Average error on the last instances seen. */
+	public abstract double getPrevError();
+	
+	/** Total error over epoch */
+	public abstract double getEpochError();
+	
+	public abstract double getGradEuclidean();
+	
+	public abstract double getGradManhattan();
+	
+	/** How uncertain we are of the error. */
+	public abstract double getUncertainty();
+
+	/** How much TIME spent on this animal. */
+	public abstract double getAge();
+
+	/** How much TIME the next step will cost. */
+	public abstract double getStepTime();
+	
+	/** Output the Model parameters */
+	public abstract String toString();
+
+	public Model getParameters() {
+		// TODO Auto-generated method stub
+		return _params;
+	}
+	
+	/** Outputs model type. */
+	public abstract String getType();
+	
+>>>>>>> origin/master
+}

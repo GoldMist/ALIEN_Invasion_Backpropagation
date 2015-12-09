@@ -1,0 +1,68 @@
+package spawners;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import utilities.AnimalPQ;
+import alien.Animal;
+import alien.Model;
+
+public class GaussianMixtureSpawner extends Spawner {
+
+	private Model.ModelGenerator _gen;
+	private AnimalPQ _animals;
+	private double _std;
+	private double _lambda;
+	
+	/**
+	 * 
+	 * @param gen 		generates the models
+	 * @param std 		standard deviation of each gaussian
+	 * @param lambda	exponential decay param based on heuristic value
+	 */
+	public GaussianMixtureSpawner(Model.ModelGenerator gen, AnimalPQ animals, double std, double lambda) {
+		_gen = gen;
+		_animals = animals;
+		_std = std;
+		_lambda = lambda;
+	}
+
+	@Override
+	public Model spawn() {
+		double bestHeur = _animals.bestVal();
+		
+		ArrayList<AnimalPQ.Entry> bestAnimals = _animals.getBest(bestHeur - Math.log(100)/_lambda);
+		
+		double Z = 0.0;
+		ArrayList<Double> rawPs = new ArrayList<Double>(bestAnimals.size());
+		
+		for (int i=0; i<bestAnimals.size(); i++) {
+			rawPs.add(Math.exp(bestHeur-bestAnimals.get(i)._val));
+			Z += rawPs.get(i);
+		}
+		
+		Random rand = new Random();
+		double r = Z*rand.nextDouble();
+		
+		int animalIdx = 0;
+		for (; animalIdx < rawPs.size()-1; animalIdx++) {
+			r -= rawPs.get(animalIdx);
+			if (r <= 0)
+				break;
+		}
+		
+		Model noise = _gen.genNRandom(_std);
+		
+		return noise.add(bestAnimals.get(animalIdx)._animal.getParameters(), 1);
+	}
+
+	@Override
+	public double getWeight() {
+		return 100.0 + (double) _hitCount;
+	}
+	
+	public void setLambda(double lambda) {
+		_lambda = lambda;
+	}
+
+}
