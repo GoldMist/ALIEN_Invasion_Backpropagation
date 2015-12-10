@@ -1,0 +1,56 @@
+package alien;
+
+import heuristics.GradientScaledHeuristic;
+import heuristics.LinearHeuristic;
+
+import java.util.ArrayList;
+
+import alien.Model.ModelGenerator;
+import animals.Cow;
+import utilities.Instance;
+import utilities.AnimalPQ;
+
+/**
+ * Algorithm.
+ * @author christy, derek
+ *
+ */
+public class UFO {
+	private ArrayList<Instance> _data;
+	private AnimalPQ _animalSelector;
+	private AnimalPQ _animalDeleter;
+	private Heuristic _selectorHeuristic;
+	private Heuristic _deleterHeuristic;
+	private ModelGenerator _generator;
+
+	public UFO(ArrayList<Instance> data, AnimalPQ animalSelector, AnimalPQ animalDeleter, Heuristic heur, ModelGenerator generator) {
+		_data = data;
+		_animalSelector = animalSelector;
+		_animalDeleter  = animalDeleter;
+		_heuristic = heur;
+		_generator = generator;
+	}
+
+	public UFO(ArrayList<Instance> data,
+			GradientScaledHeuristic selectorHeuristic,
+			LinearHeuristic deleterHeuristic, ModelGenerator generator) {
+		// TODO Auto-generated constructor stub
+		
+	}
+
+	/** Depending on current state, add some animals to _animals */
+	public void insertAnimals() {
+		// TODO Auto-generated method stub
+		if (_animalSelector.size() == 0) {
+			Animal calf = new Cow(_data, _generator.genNRandom(1));
+			_animalSelector.add(calf);
+			_animalDeleter.add(calf);
+		}
+	}
+	
+	public void deleteAnimals() {
+		
+	}
+	
+	
+}

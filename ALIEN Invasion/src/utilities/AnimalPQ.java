@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 
 import alien.Animal;
+import alien.Heuristic;
 
 /**
  * Max Animal PQ.
@@ -18,7 +19,14 @@ public class AnimalPQ {
 	
 	private PriorityQueue<PQInnerClass<Animal>> maxHeap;
 
-	public AnimalPQ(int maxAnimals) {
+	public AnimalPQ(int maxAnimals, Heuristic heur) {
+		//TODO: added signature
+	    this.maxHeap = new PriorityQueue<PQInnerClass<Animal>>(Collections.reverseOrder());
+	}
+	
+	/** Constructor with no maximum #animals */
+	public AnimalPQ(Heuristic heur) {
+		//TODO: added signature
 	    this.maxHeap = new PriorityQueue<PQInnerClass<Animal>>(Collections.reverseOrder());
 	}
 
@@ -62,6 +70,20 @@ public class AnimalPQ {
 	public double bestVal() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public Animal removeRoot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** find the carcass and remove it. 
+	 * should require a HashMap to find where the animal is
+	 * @param carcass
+	 */
+	public void removeAnimal(Animal carcass) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

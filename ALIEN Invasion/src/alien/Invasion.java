@@ -1,5 +1,6 @@
 package alien;
 
+import heuristics.GradientScaledHeuristic;
 import heuristics.LinearHeuristic;
 
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.util.Map.Entry;
 
 import alien.Model.ModelGenerator;
 import models.FFN;
+import ufos.UFO;
 import utilities.AnimalPQ;
 import utilities.ClassificationVector;
 import utilities.FeatureVector;
@@ -21,7 +23,7 @@ import functions.*;
 
 /**
  * Driver.
- * @author christy
+ * @author Derek, christy
  *
  */
 public class Invasion {
@@ -30,19 +32,16 @@ public class Invasion {
 	private static final long RUNTIME_MILLIS = 640000;
 	private static final int[] RAW_FFN_LAYERS = {10, 20, 10};
 	private static ArrayList<Integer> numUnits;
+	
+	private static ArrayList<Instance> _data;
 
 	public static void main(String[] args) {
 		Invasion_init();
-		ArrayList<Instance> data = importData(DATA_FILE);
+		_data = importData(DATA_FILE);
 		
-		AnimalPQ myAnimals = new AnimalPQ(MAX_ANIMALS);
 		Heuristic myHeuristic = new LinearHeuristic(new HashMap<String, Double>());
-		HashMap<String, Object> mode = new HashMap<String, Object>();
-		mode.put(FFN.ERROR_FUNCTION, new SquareFunction());
-		mode.put(FFN.AFUNCT, new LogisticFunction());
-		ModelGenerator generator = new FFN.FFNGenerator(numUnits, mode);
 		
-		UFO master = new UFO(data, myAnimals, myHeuristic, generator);
+		UFO master = defineUFO(); //new UFO(data, myAnimals, myHeuristic, generator);
 		
 		ArrayList<Long> x_time = new ArrayList<Long>();
 		ArrayList<Double> y_epochError = new ArrayList<Double>();
@@ -51,11 +50,17 @@ public class Invasion {
 		int ep = 0;
 		while (System.currentTimeMillis() - t_start < RUNTIME_MILLIS) {
 		    master.insertAnimals();
-			System.out.println("\n ___--RESULT(" + ep + ")--___\n");
+		    
+			//System.out.println("\n ___--RESULT(" + ep + ")--___\n");
 			// x_time.add(System.currentTimeMillis() - t_start);
-			x_time.add(System.currentTimeMillis() - t_start);
-			y_epochError.add(myAnimals.getRoot().getEpochError());
-			System.out.println(myAnimals.getRoot());
+		    
+		    if (ep%100 == 0) {
+		    	x_time.add(System.currentTimeMillis() - t_start);
+		    	y_epochError.add(myAnimals.getRoot().getEpochError());
+		    }
+		    
+			//System.out.println(myAnimals.getRoot());
+			
 			Animal activeAnimal = myAnimals.getRoot();
 			activeAnimal.step();
 			myAnimals.updateRootKey(myHeuristic.getHeuristic(activeAnimal));
@@ -170,4 +175,24 @@ public class Invasion {
 	    
 	}
 	
+	private static UFO defineUFO() {
+		
+		HashMap<String, Double> selectorParams = new HashMap<String, Double>();
+		selectorParams.put(Heuristic.PARAM_SCALE, -1.0);
+		GradientScaledHeuristic selectorHeuristic = new GradientScaledHeuristic(selectorParams);
+		
+		HashMap<String, Double> deleterParams = new HashMap<String, Double>();
+		deleterParams.put(Heuristic.PARAM_SCALE, -1.0);
+		deleterParams.put(LinearHeuristic.PARAM_RAW_ERROR, -100.0);
+		deleterParams.put(LinearHeuristic.PARAM_AGE, 10000.0);
+		deleterParams.put(LinearHeuristic.PARAM_EUCLIDEAN_GRAD_NORM, 50.0);
+		LinearHeuristic deleterHeuristic = new LinearHeuristic(deleterParams);
+
+		HashMap<String, Object> mode = new HashMap<String, Object>();
+		mode.put(FFN.ERROR_FUNCTION, new SquareFunction());
+		mode.put(FFN.AFUNCT, new LogisticFunction());
+		ModelGenerator generator = new FFN.FFNGenerator(numUnits, mode);		
+		
+		return new UFO(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
+	}
 }

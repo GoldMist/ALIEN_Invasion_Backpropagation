@@ -1,0 +1,21 @@
+package heuristics;
+
+import java.util.HashMap;
+
+import alien.Animal;
+import alien.Heuristic;
+
+public class GradientScaledHeuristic extends Heuristic {
+
+	public GradientScaledHeuristic(HashMap<String, Double> params) {
+		super(params);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public double getHeuristic(Animal entity) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

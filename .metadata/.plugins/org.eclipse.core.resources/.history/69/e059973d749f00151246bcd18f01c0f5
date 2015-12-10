@@ -1,0 +1,12 @@
+package functions;
+
+import java.util.function.Function;
+
+public class Identity implements Function<Double, Double> {
+
+	@Override
+	public Double apply(Double t) {
+		return t;
+	}
+
+}

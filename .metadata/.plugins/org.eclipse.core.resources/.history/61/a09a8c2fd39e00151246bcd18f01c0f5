@@ -1,0 +1,14 @@
+package heuristics;
+
+import alien.Animal;
+import alien.Heuristic;
+
+public class GradientScaledHeuristic extends Heuristic {
+
+	@Override
+	public double getHeuristic(Animal entity) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

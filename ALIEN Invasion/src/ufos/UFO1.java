@@ -3,11 +3,13 @@ package ufos;
 import java.util.ArrayList;
 import java.util.Random;
 
+import spawners.GaussianMixtureSpawner;
+import spawners.GaussianSpawner;
+import spawners.Spawner;
 import utilities.AnimalPQ;
 import utilities.Instance;
 import alien.Heuristic;
 import alien.Model.ModelGenerator;
-import alien.UFO;
 
 public class UFO1 extends UFO {
 	private double _spawn_rate;
@@ -19,16 +21,23 @@ public class UFO1 extends UFO {
 	 * current distributions: quasi-uniform guassian, guassian mixture, cauchy mixture
 	 */
 	private ArrayList<Double> _rawDistPs;
+	private ArrayList<Spawner> _distributions;
 
-	public UFO1(ArrayList<Instance> data, AnimalPQ animals, Heuristic heur,
-			ModelGenerator generator) {
-		super(data, animals, heur, generator);
+	public UFO1(ArrayList<Instance> data,
+			Heuristic selectorHeuristic,
+			Heuristic deleterHeuristic, ModelGenerator generator,
+			int max_animals) {
+		super(data, selectorHeuristic, deleterHeuristic, generator, max_animals);
 		init();
 	}
 	private void init() {
 		_spawn_rate = 0.2;
 		_firstSpawn = true;
 		_rand = new Random();
+		
+		_distributions = new ArrayList<Spawner>();
+		_distributions.add(new GaussianSpawner(this._generator, 1.0));
+		_distributions.add(new GaussianMixtureSpawner(this._generator, this._animalSelector, 0.2, 0.08));
 	}
 	
 	public void setSpawnRate(double rate) {

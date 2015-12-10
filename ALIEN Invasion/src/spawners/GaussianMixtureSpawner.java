@@ -2,7 +2,9 @@ package spawners;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.Function;
 
+import functions.Identity;
 import utilities.AnimalPQ;
 import alien.Animal;
 import alien.Model;
@@ -10,9 +12,13 @@ import alien.Model;
 public class GaussianMixtureSpawner extends Spawner {
 
 	private Model.ModelGenerator _gen;
+	
 	private AnimalPQ _animals;
-	private double _std;
+	private Function<Double, Double> _deviationSchedule;
+	//private double _std;
 	private double _lambda;
+	
+	private int _hitCount;
 	
 	/**
 	 * 
@@ -23,12 +29,22 @@ public class GaussianMixtureSpawner extends Spawner {
 	public GaussianMixtureSpawner(Model.ModelGenerator gen, AnimalPQ animals, double std, double lambda) {
 		_gen = gen;
 		_animals = animals;
-		_std = std;
+		_deviationSchedule = new Identity(std);
 		_lambda = lambda;
+		_hitCount = 0;
+	}
+	public GaussianMixtureSpawner(Model.ModelGenerator gen, AnimalPQ animals, 
+			Function<Double, Double> std, double lambda) {
+		_gen = gen;
+		_animals = animals;
+		_deviationSchedule = std;
+		_lambda = lambda;
+		_hitCount = 0;
 	}
 
 	@Override
 	public Model spawn() {
+		_hitCount++;
 		double bestHeur = _animals.bestVal();
 		
 		ArrayList<AnimalPQ.Entry> bestAnimals = _animals.getBest(bestHeur - Math.log(100)/_lambda);
@@ -51,7 +67,7 @@ public class GaussianMixtureSpawner extends Spawner {
 				break;
 		}
 		
-		Model noise = _gen.genNRandom(_std);
+		Model noise = _gen.genNRandom(_deviationSchedule.apply((double) _hitCount));
 		
 		return noise.add(bestAnimals.get(animalIdx)._animal.getParameters(), 1);
 	}

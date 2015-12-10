@@ -1,0 +1,17 @@
+package functions;
+
+import java.util.function.Function;
+
+public class OffsetInverseFunction implements Function<Integer, Double> {
+	
+	public OffsetInverseFunction() {
+		
+	}
+
+	@Override
+	public Double apply(Integer arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

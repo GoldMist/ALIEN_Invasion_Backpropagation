@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="heuristics.GradientScaledHeuristic"/>
+<fullyQualifiedTypeName name="alien.Heuristic"/>
+<fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="spawners.Spawner"/>
+<fullyQualifiedTypeName name="spawners.GaussianSpawner"/>
+<fullyQualifiedTypeName name="spawners.GaussianMixtureSpawner"/>
+<fullyQualifiedTypeName name="java.util.function.Function"/>
+<fullyQualifiedTypeName name="functions.Identity"/>
+</qualifiedTypeNameHistroy>

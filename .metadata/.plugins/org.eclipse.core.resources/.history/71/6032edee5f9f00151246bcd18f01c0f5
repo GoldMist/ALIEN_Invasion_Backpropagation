@@ -1,0 +1,47 @@
+package heuristics;
+
+import java.util.HashMap;
+
+import alien.Animal;
+import alien.Heuristic;
+
+public class LinearHeuristic extends Heuristic {
+	public static final String PARAM_RAW_ERROR = "*LinearHeuristic:RAW ERROR*";
+	public static final String PARAM_AGE = "*LinearHeuristic:AGE*";
+	public static final String PARAM_EUCLIDEAN_GRAD_NORM = "*LinearHeuristic:EUCLIDEAN NORM*";
+	public static final String PARAM_MANHATTAN_GRAD_NORM = "*LinearHeuristic:MANHATTAN NORM*";
+	public static final String PARAM_UNCERTAINTY = "*LinearHeuristic:UNCERTAINTY*";
+
+	public LinearHeuristic(HashMap<String, Double> params) {
+		super(params);
+	}
+
+	@Override
+	public double getHeuristic(Animal entity) {
+		double heurVal = 0.0;
+		
+		heurVal += entity.getPrevError()*getParam(
+				LinearHeuristic.PARAM_RAW_ERROR);
+		heurVal += entity.getAge()*getParam(
+				LinearHeuristic.PARAM_AGE);
+		heurVal += entity.getGradEuclidean()*getParam(
+				LinearHeuristic.PARAM_EUCLIDEAN_GRAD_NORM);
+		heurVal += entity.getGradManhattan()*getParam(
+				LinearHeuristic.PARAM_MANHATTAN_GRAD_NORM);
+		heurVal += entity.getUncertainty()*getParam(
+				LinearHeuristic.PARAM_UNCERTAINTY);
+		
+		heurVal /= entity.getStepTime();
+		
+		return heurVal;
+	}
+	
+	public double getParam(String name) {
+		if (!this._parameters.containsKey(name)) {
+			return 0.0;
+		} else {
+			return this._parameters.get(name);
+		}
+	}
+
+}
