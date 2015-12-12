@@ -46,8 +46,8 @@ public class UFO {
 		_deleterHeuristic  = deleterHeuristic;
 		_generator = generator;
 		
-		_animalSelector = new AnimalPQ(max_animals, _selectorHeuristic);
-		_animalDeleter = new AnimalPQ(max_animals, _deleterHeuristic);
+		_animalSelector = new AnimalPQ(_selectorHeuristic);
+		_animalDeleter = new AnimalPQ(_deleterHeuristic);
 	}
 
 	/** Depending on current state, add some animals to _animals */
@@ -62,7 +62,10 @@ public class UFO {
 	}
 	
 	public void step() {
-		
+		Animal mover = _animalSelector.getRoot();
+		mover.step();
+		_animalSelector.updateRootKey(_selectorHeuristic.getHeuristic(mover));
+		_animalDeleter.update(mover);
 	}
 	
 	public void deleteAnimals() {

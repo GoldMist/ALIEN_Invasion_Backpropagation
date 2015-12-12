@@ -33,13 +33,13 @@ public class Invasion {
 	private static final int[] RAW_FFN_LAYERS = {10, 20, 10};
 	private static ArrayList<Integer> numUnits;
 	
-	private static ArrayList<Instance> _data;
+	//private static ArrayList<Instance> _data;
 
 	public static void main(String[] args) {
 		Invasion_init();
-		_data = importData(DATA_FILE);
+		//_data = importData(DATA_FILE);
 		
-		Heuristic myHeuristic = new LinearHeuristic(new HashMap<String, Double>());
+		//Heuristic myHeuristic = new LinearHeuristic(new HashMap<String, Double>());
 		
 		UFO master = defineUFO(); //new UFO(data, myAnimals, myHeuristic, generator);
 		
@@ -188,7 +188,7 @@ public class Invasion {
 		HashMap<String, Double> deleterParams = new HashMap<String, Double>();
 		deleterParams.put(Heuristic.PARAM_SCALE, -1.0);
 		deleterParams.put(LinearHeuristic.PARAM_RAW_ERROR, -100.0);
-		deleterParams.put(LinearHeuristic.PARAM_AGE, 10000.0);
+		deleterParams.put(LinearHeuristic.PARAM_INVERSE_AGE, 10000.0);
 		deleterParams.put(LinearHeuristic.PARAM_EUCLIDEAN_GRAD_NORM, 50.0);
 		LinearHeuristic deleterHeuristic = new LinearHeuristic(deleterParams);
 
