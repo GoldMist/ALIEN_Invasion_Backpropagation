@@ -11,6 +11,7 @@ import utilities.Instance;
 import alien.Animal;
 import alien.Heuristic;
 import alien.Model.ModelGenerator;
+import animals.Cow;
 
 public class UFO1 extends UFO {
 	private double _spawn_rate;
@@ -74,6 +75,11 @@ public class UFO1 extends UFO {
 			if (r <= 0) 
 				break;
 		}
+		
+		Animal calf = new Cow(_data, _distributions.get(dist).spawn());
+		calf.step();
+		this._animalSelector.add(calf);
+		this._animalDeleter.add(calf);
 	}
 	
 	@Override
