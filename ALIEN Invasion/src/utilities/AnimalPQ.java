@@ -69,7 +69,7 @@ public class AnimalPQ {
 	/** return all Animals with heuristic value greater or equal to 'd' */
 	public ArrayList<AnimalPQ.Entry> getBest(double d) {
 		// TODO Auto-generated method stub
-	    Object[] thing = this.maxHeap.toArray();
+	    /*Object[] thing = this.maxHeap.toArray();
 	    PQInnerClass<Animal>[] PQthing = (PQInnerClass<Animal>[]) thing;
 	    
 	    ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
@@ -86,7 +86,24 @@ public class AnimalPQ {
 	        }
 	        
 	        
-	    }
+	    }*/
+	    
+	    PriorityQueue<PQInnerClass<Animal>> tempHeap = this.maxHeap;
+	    ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
+        
+        while (!this.maxHeap.isEmpty()) {
+            
+            PQInnerClass<Animal> temp = this.maxHeap.remove();
+            if (temp.getPNum() >= d) {
+           
+                result.add(new Entry(temp.getPNum(), temp.getItem()));
+            }
+            tempHeap.add(temp);
+            
+            
+        }
+        
+        this.maxHeap = tempHeap;
 	    
 	    
 		return result;
@@ -108,7 +125,22 @@ public class AnimalPQ {
 	public void removeAnimal(Animal carcass) {
 		// TODO Auto-generated method stub
 	    
+	    PriorityQueue<PQInnerClass<Animal>> tempHeap = this.maxHeap;
+	    
+	    while (!this.maxHeap.isEmpty()) {
+	        
+	        PQInnerClass<Animal> temp = this.maxHeap.remove();
+	        if (temp.getItem() != carcass) {
+	            tempHeap.add(temp);
+	        }
+	        
+	        
+	    }
+	    this.maxHeap = tempHeap;
+	    
+	    /*
 	    Object[] thing = this.maxHeap.toArray();
+	    PQInnerClass<Animal>[] anotherthing = this.maxHeap.toArray(new PQInnerClass<Animal>[this.maxHeap.size()]);
         PQInnerClass<Animal>[] PQthing = (PQInnerClass<Animal>[]) thing;
         
         this.maxHeap.clear();
@@ -119,8 +151,8 @@ public class AnimalPQ {
                 this.maxHeap.add(PQthing[i]);
                 
             }
-        }
-
+        }*/
+        
 	}
 
 	/**

@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import alien.Model.ModelGenerator;
 import models.FFN;
 import ufos.UFO;
+import ufos.UFO1;
 import utilities.AnimalPQ;
 import utilities.ClassificationVector;
 import utilities.FeatureVector;
@@ -27,10 +28,10 @@ import functions.*;
  *
  */
 public class Invasion {
-	private static final String DATA_FILE = "poker-hand-training-true.data";
+	private static final String DATA_FILE = "xor.data";
 	private static final int MAX_ANIMALS = 1;
-	private static final long RUNTIME_MILLIS = 640000;
-	private static final int[] RAW_FFN_LAYERS = {10, 20, 10};
+	private static final long RUNTIME_MILLIS = 10000;
+	private static final int[] RAW_FFN_LAYERS = {2, 2, 2};
 	private static ArrayList<Integer> numUnits;
 	
 	//private static ArrayList<Instance> _data;
@@ -197,6 +198,6 @@ public class Invasion {
 		mode.put(FFN.AFUNCT, new LogisticFunction());
 		ModelGenerator generator = new FFN.FFNGenerator(numUnits, mode);		
 		
-		return new UFO(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
+		return new UFO1(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
 	}
 }
