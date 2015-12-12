@@ -55,9 +55,14 @@ public class UFO {
 		// TODO Auto-generated method stub
 		if (_animalSelector.size() == 0) {
 			Animal calf = new Cow(_data, _generator.genNRandom(1));
+			calf.step();
 			_animalSelector.add(calf);
 			_animalDeleter.add(calf);
 		}
+	}
+	
+	public void step() {
+		
 	}
 	
 	public void deleteAnimals() {
@@ -68,6 +73,10 @@ public class UFO {
 		
 		Animal carcass = _animalDeleter.removeRoot();
 		_animalSelector.removeAnimal(carcass);
+	}
+
+	public double getEpochError() {
+		return this._animalSelector.getRoot().getEpochError();
 	}
 	
 	
