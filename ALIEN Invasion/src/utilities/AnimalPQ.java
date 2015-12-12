@@ -120,11 +120,18 @@ public class AnimalPQ {
                 
             }
         }
-        
-        
-        
-		
+
 	}
 
+	/**
+	 * Find an animal and update its value.
+	 * @param carcass
+	 */
+	public void update(Animal carcass) {
+	    this.removeAnimal(carcass);
+	    this.add(carcass);
+	    
+	}
+	
 	
 }
