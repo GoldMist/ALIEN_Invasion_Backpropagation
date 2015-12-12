@@ -27,7 +27,7 @@ import functions.*;
  *
  */
 public class Invasion {
-	private static final String DATA_FILE = "poker-hand-training-true.data";
+	private static final String DATA_FILE = "tic-tac-toe-binary.txt";
 	private static final int MAX_ANIMALS = 1;
 	private static final long RUNTIME_MILLIS = 640000;
 	private static final int[] RAW_FFN_LAYERS = {10, 20, 10};
