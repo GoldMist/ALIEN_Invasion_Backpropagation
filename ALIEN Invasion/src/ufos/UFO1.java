@@ -8,6 +8,7 @@ import spawners.GaussianSpawner;
 import spawners.Spawner;
 import utilities.AnimalPQ;
 import utilities.Instance;
+import alien.Animal;
 import alien.Heuristic;
 import alien.Model.ModelGenerator;
 
@@ -69,6 +70,19 @@ public class UFO1 extends UFO {
 			if (r <= 0) 
 				break;
 		}
+	}
+	
+	@Override
+	public void deleteAnimals() {
+
+		double pDelete = Math.atan(_animalDeleter.size()/100.0);
+		Random rand = new Random();
+		if (rand.nextDouble() > pDelete)
+			return;
+		
+		Animal carcass = _animalDeleter.removeRoot();
+		_animalSelector.removeAnimal(carcass);
+		
 	}
 
 }

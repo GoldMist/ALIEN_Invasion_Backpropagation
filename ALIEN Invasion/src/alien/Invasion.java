@@ -56,27 +56,31 @@ public class Invasion {
 		    
 		    if (ep%100 == 0) {
 		    	x_time.add(System.currentTimeMillis() - t_start);
-		    	y_epochError.add(myAnimals.getRoot().getEpochError());
+		    	y_epochError.add(master.getEpochError());
 		    }
+		    
+		    master.step();
+		    
+		    master.deleteAnimals();
 		    
 			//System.out.println(myAnimals.getRoot());
 			
-			Animal activeAnimal = myAnimals.getRoot();
-			activeAnimal.step();
-			myAnimals.updateRootKey(myHeuristic.getHeuristic(activeAnimal));
+			//Animal activeAnimal = myAnimals.getRoot();
+			//activeAnimal.step();
+			//myAnimals.updateRootKey(myHeuristic.getHeuristic(activeAnimal));
 			
 			ep++;
 		}
 		
 
 		
-		System.out.println("\n ___--RESULT(" + ep + ")--___\n");
+		/*System.out.println("\n ___--RESULT(" + ep + ")--___\n");
 		System.out.println(myAnimals.getRoot());
 		System.out.println(myAnimals.getRoot().getEpochError());
         x_time.add(System.currentTimeMillis() - t_start);
-        y_epochError.add(myAnimals.getRoot().getEpochError());
+        y_epochError.add(myAnimals.getRoot().getEpochError());*/
         
-        PrettyGraph graph = new PrettyGraph(x_time, y_epochError, myAnimals.getRoot().getType());
+        PrettyGraph graph = new PrettyGraph(x_time, y_epochError, "UFO"); //myAnimals.getRoot().getType());
         graph.createGraph();
         
 	}
