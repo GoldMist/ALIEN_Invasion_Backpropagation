@@ -66,13 +66,6 @@ public class UFO {
 	}
 	
 	public void deleteAnimals() {
-		double pDelete = Math.atan(_animalDeleter.size()/100.0);
-		Random rand = new Random();
-		if (rand.nextDouble() > pDelete)
-			return;
-		
-		Animal carcass = _animalDeleter.removeRoot();
-		_animalSelector.removeAnimal(carcass);
 	}
 
 	public double getEpochError() {
