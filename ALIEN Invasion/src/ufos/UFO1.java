@@ -21,7 +21,6 @@ public class UFO1 extends UFO {
 	 * does not have to sum to 1
 	 * current distributions: quasi-uniform guassian, guassian mixture, cauchy mixture
 	 */
-	private ArrayList<Double> _rawDistPs;
 	private ArrayList<Spawner> _distributions;
 
 	public UFO1(ArrayList<Instance> data,
@@ -50,6 +49,11 @@ public class UFO1 extends UFO {
 	
 	@Override
 	public void insertAnimals() {
+		ArrayList<Double> rawDistPs = new ArrayList<Double>();
+		for (Spawner spawner : _distributions) {
+			rawDistPs.add(spawner.getWeight());
+		}
+		
 		if (_firstSpawn) {
 			_firstSpawn = false;
 		} else {
@@ -59,14 +63,14 @@ public class UFO1 extends UFO {
 		}
 		
 		double Z = 0.0;
-		for (double p : _rawDistPs) {
+		for (double p : rawDistPs) {
 			Z += p;
 		}
 		
 		double r = Z*_rand.nextDouble();
 		int dist=0;
-		for (; dist<_rawDistPs.size()-1; dist++) {
-			r -= _rawDistPs.get(dist);
+		for (; dist<rawDistPs.size()-1; dist++) {
+			r -= rawDistPs.get(dist);
 			if (r <= 0) 
 				break;
 		}
