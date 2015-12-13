@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.PriorityQueue;
+import java.util.TreeSet;
 
 import alien.Animal;
 import alien.Heuristic;
@@ -32,26 +33,25 @@ public class AnimalPQ {
     
     private Animal _root;
     private Heuristic heur;
-    private AVLTree<AnimalPQ.Entry> avl;
+    private TreeSet<AnimalPQ.Entry> tree;
     private int maxAnimals;
     private boolean hasMax;
-   // private HashMap<Animal, Double> animalToKey;
+
     
     public AnimalPQ(int maxAnimals, Heuristic heur) {
-        this.avl = new AVLTree();
+        this.tree = new TreeSet<AnimalPQ.Entry>();
         this.heur = heur;
         this.hasMax = true;
         this.maxAnimals = maxAnimals;
-     //   this.animalToKey = new HashMap<Animal, Double>();
+
     }
     
     /** Constructor with no maximum #animals */
     public AnimalPQ(Heuristic heur) {
-        this.avl = new AVLTree();
+        this.tree = new TreeSet<AnimalPQ.Entry>();
         this.heur = heur;
         this.hasMax = false;
         this.maxAnimals = 0;
-    //    this.animalToKey = new HashMap<Animal, Double>();
     }
 
     /**
@@ -59,80 +59,77 @@ public class AnimalPQ {
      * @return the root
      */
     public Animal getRoot() {
-        if (this.avl.size() == 0) {
+        if (this.tree.size() == 0) {
             return null;
         }
-        return this.avl.getMax()._animal;
+        return this.tree.last()._animal;
     }
 
     /** update the key of the item currently at the root */
     public void updateRootKey(double key) {
         
-        if (this.avl.size() == 0) {
+        if (this.tree.size() == 0) {
             return;
         }
-        
-        // remove from avl tree
-        Entry temp = this.avl.getMax();
-        this.avl.remove(temp);
-        // update key
+
+        Entry temp = this.tree.pollLast();
         temp._val = key;
-        // put back in
-        this.avl.add(temp);
-       // this.animalToKey.replace(temp._animal, temp._val);
+        this.tree.add(temp);
         
     }
 
     public int size() {
-        return this.avl.size();
+        return this.tree.size();
     }
     
     public void add(Animal calf) {
         
-        if (this.hasMax && (this.avl.size() >= this.maxAnimals)) {
-            this.avl.remove(this.avl.getMin());
+        if (this.hasMax && (this.tree.size() >= this.maxAnimals)) {
+            this.tree.pollFirst();
         }
         
         Entry temp = new Entry((this.heur.getHeuristic(calf)), calf);
-        this.avl.add(temp);
-       // this.animalToKey.put(temp._animal, temp._val);
+        this.tree.add(temp);
     }
     
     /** return all Animals with heuristic value greater or equal to 'd' */
     public ArrayList<AnimalPQ.Entry> getBest(double d) {
-        // TODO Auto-generated method stub
-        Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
-        Iterator<AnimalPQ.Entry> iter = it.iterator();
-        ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
-        while (iter.hasNext()) {
-            Entry temp = iter.next();
-            if (temp._val >= d) {
-                result.add(temp);
-            }
+        
+        Entry start = this.tree.ceiling(new Entry(d, null));
+        if (start == null) {
+            return null;
         }
-        return result;
+        TreeSet<AnimalPQ.Entry> subSet = (TreeSet<Entry>) this.tree.tailSet(start);
+        ArrayList<AnimalPQ.Entry> list = new ArrayList<AnimalPQ.Entry>();
+        while (!subSet.isEmpty()) {
+            list.add(subSet.pollFirst());
+        }
+        
+        return list;
     }
 
     /** return heuristic value of the root */
     public double bestVal() {
         
-        if (this.avl.size() == 0) {
+        if (this.tree.size() == 0) {
             return 0;
         }
         
-        return this.avl.getMax()._val;
+        return this.tree.pollLast()._val;
     }
 
+    /**
+     * Remove max.
+     * @return
+     */
     public Animal removeRoot() {
         
-        if (this.avl.size() == 0) {
+        if (this.tree.size() == 0) {
             return null;
         }
         
-        Entry temp = this.avl.getMax();
-        this.avl.remove(temp);
-        // this.animalToKey.remove(temp._animal);
-        return temp._animal;
+        return this.tree.pollLast()._animal;
+
     }
 
     /** find the carcass and remove it. 
@@ -140,17 +137,18 @@ public class AnimalPQ {
      * @param carcass
      */
     public void removeAnimal(Animal carcass) {
-        // double key = this.animalToKey.get(carcass);
-        Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
-        Iterator<AnimalPQ.Entry> iter = it.iterator();
-        ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
-        this.avl = new AVLTree();
+             
+        Iterator<AnimalPQ.Entry> iter = this.tree.iterator();
+        
         while (iter.hasNext()) {
-            Entry temp = iter.next();
-            if (temp._animal != carcass) {
-                this.avl.add(temp);
+            Entry curr = iter.next();
+            if (curr._animal == carcass) {
+                iter.remove();
+                return;
             }
+            
         }
+        
         
     }
 
@@ -159,17 +157,20 @@ public class AnimalPQ {
      * @param carcass
      */
     public void update(Animal carcass) {
-        Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
-        Iterator<AnimalPQ.Entry> iter = it.iterator();
-        ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
-        this.avl = new AVLTree();
+        
+        Iterator<AnimalPQ.Entry> iter = this.tree.iterator();
+        
         while (iter.hasNext()) {
-            Entry temp = iter.next();
-            if (temp._animal == carcass) {
-                temp._val = this.heur.getHeuristic(carcass);
+            Entry curr = iter.next();
+            if (curr._animal == carcass) {
+                iter.remove();
+                curr._val = this.heur.getHeuristic(carcass);
+                this.tree.add(curr);
+                return;
             }
-            this.avl.add(temp);
+            
         }
+        
         
     }
     
