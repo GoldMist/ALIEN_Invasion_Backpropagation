@@ -82,6 +82,7 @@ public class UFO1 extends UFO {
 		calf.step();
 		this._animalSelector.add(calf);
 		this._animalDeleter.add(calf);
+		System.out.println(_animalSelector.size());
 	}
 	
 	@Override
