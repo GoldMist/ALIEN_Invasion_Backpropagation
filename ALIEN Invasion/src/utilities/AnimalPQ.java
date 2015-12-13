@@ -3,6 +3,7 @@ package utilities;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
@@ -24,7 +25,6 @@ public class AnimalPQ {
 
         @Override
         public int compareTo(Entry o) {
-            // TODO Auto-generated method stub
             return ((Double) this._val).compareTo((Double) o._val);
         }
         
@@ -35,14 +35,13 @@ public class AnimalPQ {
     private AVLTree<AnimalPQ.Entry> avl;
     private int maxAnimals;
     private boolean hasMax;
-   // private HashMap<Animal, Double> animalToKey;
     
     public AnimalPQ(int maxAnimals, Heuristic heur) {
         this.avl = new AVLTree();
         this.heur = heur;
         this.hasMax = true;
         this.maxAnimals = maxAnimals;
-     //   this.animalToKey = new HashMap<Animal, Double>();
+
     }
     
     /** Constructor with no maximum #animals */
@@ -51,7 +50,7 @@ public class AnimalPQ {
         this.heur = heur;
         this.hasMax = false;
         this.maxAnimals = 0;
-    //    this.animalToKey = new HashMap<Animal, Double>();
+
     }
 
     /**
@@ -62,6 +61,7 @@ public class AnimalPQ {
         if (this.avl.size() == 0) {
             return null;
         }
+
         return this.avl.getMax()._animal;
     }
 
@@ -79,7 +79,7 @@ public class AnimalPQ {
         temp._val = key;
         // put back in
         this.avl.add(temp);
-       // this.animalToKey.replace(temp._animal, temp._val);
+
         
     }
 
@@ -89,18 +89,22 @@ public class AnimalPQ {
     
     public void add(Animal calf) {
         
+        if (calf == null) {
+            System.out.println("WUTTTTTT");
+        }
+        
         if (this.hasMax && (this.avl.size() >= this.maxAnimals)) {
             this.avl.remove(this.avl.getMin());
         }
         
         Entry temp = new Entry((this.heur.getHeuristic(calf)), calf);
         this.avl.add(temp);
-       // this.animalToKey.put(temp._animal, temp._val);
+        
     }
     
     /** return all Animals with heuristic value greater or equal to 'd' */
     public ArrayList<AnimalPQ.Entry> getBest(double d) {
-        // TODO Auto-generated method stub
+        
         Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
         Iterator<AnimalPQ.Entry> iter = it.iterator();
         ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
@@ -110,6 +114,7 @@ public class AnimalPQ {
                 result.add(temp);
             }
         }
+        
         return result;
     }
 
@@ -119,7 +124,7 @@ public class AnimalPQ {
         if (this.avl.size() == 0) {
             return 0;
         }
-        
+
         return this.avl.getMax()._val;
     }
 
@@ -133,6 +138,7 @@ public class AnimalPQ {
         this.avl.remove(temp);
         // this.animalToKey.remove(temp._animal);
         return temp._animal;
+        
     }
 
     /** find the carcass and remove it. 
@@ -140,18 +146,27 @@ public class AnimalPQ {
      * @param carcass
      */
     public void removeAnimal(Animal carcass) {
-        // double key = this.animalToKey.get(carcass);
+
         Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
         Iterator<AnimalPQ.Entry> iter = it.iterator();
-        ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
-        this.avl = new AVLTree();
+        Entry toRemove = null;
         while (iter.hasNext()) {
             Entry temp = iter.next();
-            if (temp._animal != carcass) {
-                this.avl.add(temp);
+            
+            if (temp._animal == carcass) {
+                
+                if ((toRemove == null) || (toRemove._val >= temp._val)) {
+                    toRemove = temp;
+                }
+                
             }
         }
         
+        if (toRemove != null) {
+            this.avl.remove(toRemove);
+        }
+
+
     }
 
     /**
@@ -159,6 +174,7 @@ public class AnimalPQ {
      * @param carcass
      */
     public void update(Animal carcass) {
+
         Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
         Iterator<AnimalPQ.Entry> iter = it.iterator();
         ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
@@ -170,8 +186,10 @@ public class AnimalPQ {
             }
             this.avl.add(temp);
         }
+
         
     }
+   
     
     
 }

@@ -520,6 +520,11 @@ public class AVLTree<T extends Comparable<? super T>> {
      * @return the max value
      */
     public T getMax() {
+ 
+        BNode max = this.findMax(this.root);
+        if (max == null) {
+            return null;
+        }
         return this.findMax(this.root).data;
     }
 
