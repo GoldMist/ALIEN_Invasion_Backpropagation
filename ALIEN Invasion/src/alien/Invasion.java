@@ -28,6 +28,15 @@ import functions.*;
  *
  */
 public class Invasion {
+	/**
+	 * -1: no graph, nothing
+	 *  0: just expected output (like graphs)
+	 *  1: some prints about internal data
+	 *  2: 
+	 *  3: debugging prints
+	 */
+	private static final int VERBOSITY = 3;
+	
 	private static final String DATA_FILE = "xor.data";
 	private static final int MAX_ANIMALS = 1;
 	private static final long RUNTIME_MILLIS = 1000;
@@ -60,12 +69,12 @@ public class Invasion {
 		    	x_time.add(System.currentTimeMillis() - t_start);
 		    	y_epochError.add(master.getEpochError());
 		    }
-		    
-		    master.step();
+
 			System.out.println("stepping");
-		    
-		    master.deleteAnimals();
+		    master.step();
+
 			System.out.println("deleting");
+		    master.deleteAnimals();
 		    
 			//System.out.println(myAnimals.getRoot());
 			
@@ -202,5 +211,11 @@ public class Invasion {
 		ModelGenerator generator = new FFN.FFNGenerator(numUnits, mode);		
 		
 		return new UFO1(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
+	}
+	
+	public static void println(int verbose_level, String output) {
+		if (VERBOSITY >= verbose_level) {
+			System.out.println(output);
+		}
 	}
 }

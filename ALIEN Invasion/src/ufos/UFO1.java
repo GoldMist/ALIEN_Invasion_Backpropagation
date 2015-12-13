@@ -10,6 +10,7 @@ import utilities.AnimalPQ;
 import utilities.Instance;
 import alien.Animal;
 import alien.Heuristic;
+import alien.Invasion;
 import alien.Model.ModelGenerator;
 import animals.Cow;
 
@@ -50,6 +51,8 @@ public class UFO1 extends UFO {
 	
 	@Override
 	public void insertAnimals() {
+		Invasion.println(1, "#animals = " + _animalSelector.size());
+		
 		ArrayList<Double> rawDistPs = new ArrayList<Double>();
 		for (Spawner spawner : _distributions) {
 			rawDistPs.add(spawner.getWeight());
@@ -78,15 +81,17 @@ public class UFO1 extends UFO {
 			}
 		}
 		
+		dist = 0;
+		
 		Animal calf = new Cow(_data, _distributions.get(dist).spawn());
 		calf.step();
 		this._animalSelector.add(calf);
 		this._animalDeleter.add(calf);
-		System.out.println(_animalSelector.size());
 	}
 	
 	@Override
 	public void deleteAnimals() {
+		
 
 		double pDelete = Math.atan(_animalDeleter.size()/100.0);
 		Random rand = new Random();
