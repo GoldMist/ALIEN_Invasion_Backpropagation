@@ -45,6 +45,9 @@ public class AnimalPQ {
 	 * @return the root
 	 */
 	public Animal getRoot() {
+	    if (this.maxHeap.peek() == null) {
+	        return null;
+	    }
 		return this.maxHeap.peek().getItem();
 	}
 
@@ -105,16 +108,21 @@ public class AnimalPQ {
         
         this.maxHeap = tempHeap;
 	    
-	    
 		return result;
 	}
 
 	/** return heuristic value of the root */
 	public double bestVal() {
+	    if (this.maxHeap.size() == 0) {
+	        return 0;
+	    }
 	    return this.maxHeap.peek().getPNum();
 	}
 
 	public Animal removeRoot() {
+	    if (this.maxHeap.size() == 0) {
+	        return null;
+	    }
 		return this.maxHeap.poll().getItem();
 	}
 
