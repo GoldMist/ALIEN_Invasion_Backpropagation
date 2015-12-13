@@ -53,7 +53,7 @@ public class AnimalPQ {
 
 	/** update the key of the item currently at the root */
 	public void updateRootKey(double key) {
-	    PQInnerClass<Animal> temp = this.maxHeap.poll();
+	    PQInnerClass<Animal> temp = this.maxHeap.remove();
 	    temp.setPNum(key);
 	    this.maxHeap.add(temp);
 		
