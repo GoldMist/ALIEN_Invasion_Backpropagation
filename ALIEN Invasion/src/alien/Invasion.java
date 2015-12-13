@@ -201,6 +201,6 @@ public class Invasion {
 		mode.put(FFN.AFUNCT, new LogisticFunction());
 		ModelGenerator generator = new FFN.FFNGenerator(numUnits, mode);		
 		
-		return new UFO1(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
+		return new UFO(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
 	}
 }

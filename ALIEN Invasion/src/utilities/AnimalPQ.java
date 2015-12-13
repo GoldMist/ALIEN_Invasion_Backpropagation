@@ -2,6 +2,8 @@ package utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import alien.Animal;
@@ -11,169 +13,165 @@ import alien.Heuristic;
  * Max Animal PQ.
  */
 public class AnimalPQ {
-	public class Entry {
-		public double _val;
-		public Animal _animal;
-		
-		public Entry(double val, Animal animal) {
-		    _val = val;
-		    _animal = animal;
-		}
-		
-	}
-	private Animal _root;
-	
-	private PriorityQueue<PQInnerClass<Animal>> maxHeap;
-	
-	Heuristic heur;
-
-	public AnimalPQ(int maxAnimals, Heuristic heur) {
-		//TODO: added signature
-	    this.maxHeap = new PriorityQueue<PQInnerClass<Animal>>(Collections.reverseOrder());
-	    this.heur = heur;
-	}
-	
-	/** Constructor with no maximum #animals */
-	public AnimalPQ(Heuristic heur) {
-		//TODO: added signature
-	    this.maxHeap = new PriorityQueue<PQInnerClass<Animal>>(Collections.reverseOrder());
-	    this.heur = heur;
-	}
-
-	/**
-	 * Retrieves root but does not remove it.
-	 * @return the root
-	 */
-	public Animal getRoot() {
-	    if (this.maxHeap.peek() == null) {
-	        return null;
-	    }
-		return this.maxHeap.peek().getItem();
-	}
-
-	/** update the key of the item currently at the root */
-	public void updateRootKey(double key) {
-	    PQInnerClass<Animal> temp = this.maxHeap.remove();
-	    temp.setPNum(key);
-	    this.maxHeap.add(temp);
-		
-	}
-
-	public int size() {
-		return this.maxHeap.size();
-	}
-	
-	public void add(Animal calf) {
-	    
-	    double key = this.heur.getHeuristic(calf);
-	    this.maxHeap.add(new PQInnerClass<Animal>(calf, key));
-	}
-	
-	/** return all Animals with heuristic value greater or equal to 'd' */
-	public ArrayList<AnimalPQ.Entry> getBest(double d) {
-		// TODO Auto-generated method stub
-	    /*Object[] thing = this.maxHeap.toArray();
-	    PQInnerClass<Animal>[] PQthing = (PQInnerClass<Animal>[]) thing;
-	    
-	    ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
-	    
-	    for (int i = 0; i < PQthing.length; i++) {
-	        
-	        PQInnerClass<Animal> currAnimal = PQthing[i];
-	        
-	        if (currAnimal.getPNum() >= d) {
-	            
-	            result.add(new Entry(currAnimal.getPNum(), currAnimal.getItem()));
-	            
-	            
-	        }
-	        
-	        
-	    }*/
-	    
-	    PriorityQueue<PQInnerClass<Animal>> tempHeap = this.maxHeap;
-	    ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
+    public class Entry implements Comparable<Entry>{
+        public double _val;
+        public Animal _animal;
         
-        /*while (!this.maxHeap.isEmpty()) {
-            
-            PQInnerClass<Animal> temp = this.maxHeap.remove();
-            if (temp.getPNum() >= d) {
-           
-                result.add(new Entry(temp.getPNum(), temp.getItem()));
-            }
-            tempHeap.add(temp);
-            
-            
+        public Entry(double val, Animal animal) {
+            _val = val;
+            _animal = animal;
+        }
+
+        @Override
+        public int compareTo(Entry o) {
+            // TODO Auto-generated method stub
+            return ((Double) this._val).compareTo((Double) o._val);
         }
         
-        this.maxHeap = tempHeap;
-	    */
-	    
-	    result.add(new Entry(this.maxHeap.peek().getPNum(), this.maxHeap.peek().getItem()));
-		return result;
-	}
+    }
+    
+    private Animal _root;
+    private Heuristic heur;
+    private AVLTree<AnimalPQ.Entry> avl;
+    private int maxAnimals;
+    private boolean hasMax;
+   // private HashMap<Animal, Double> animalToKey;
+    
+    public AnimalPQ(int maxAnimals, Heuristic heur) {
+        this.avl = new AVLTree();
+        this.heur = heur;
+        this.hasMax = true;
+        this.maxAnimals = maxAnimals;
+     //   this.animalToKey = new HashMap<Animal, Double>();
+    }
+    
+    /** Constructor with no maximum #animals */
+    public AnimalPQ(Heuristic heur) {
+        this.avl = new AVLTree();
+        this.heur = heur;
+        this.hasMax = false;
+        this.maxAnimals = 0;
+    //    this.animalToKey = new HashMap<Animal, Double>();
+    }
 
-	/** return heuristic value of the root */
-	public double bestVal() {
-	    if (this.maxHeap.size() == 0) {
-	        return 0;
-	    }
-	    return this.maxHeap.peek().getPNum();
-	}
+    /**
+     * Retrieves root but does not remove it.
+     * @return the root
+     */
+    public Animal getRoot() {
+        if (this.avl.size() == 0) {
+            return null;
+        }
+        return this.avl.getMax()._animal;
+    }
 
-	public Animal removeRoot() {
-	    if (this.maxHeap.size() == 0) {
-	        return null;
-	    }
-		return this.maxHeap.poll().getItem();
-	}
-
-	/** find the carcass and remove it. 
-	 * should require a HashMap to find where the animal is
-	 * @param carcass
-	 */
-	public void removeAnimal(Animal carcass) {
-		// TODO Auto-generated method stub
-	    
-	    PriorityQueue<PQInnerClass<Animal>> tempHeap = this.maxHeap;
-	    
-	    while (!this.maxHeap.isEmpty()) {
-	        
-	        PQInnerClass<Animal> temp = this.maxHeap.remove();
-	        if (temp.getItem() != carcass) {
-	            tempHeap.add(temp);
-	        }
-	        
-	        
-	    }
-	    this.maxHeap = tempHeap;
-	    
-	    /*
-	    Object[] thing = this.maxHeap.toArray();
-	    PQInnerClass<Animal>[] anotherthing = this.maxHeap.toArray(new PQInnerClass<Animal>[this.maxHeap.size()]);
-        PQInnerClass<Animal>[] PQthing = (PQInnerClass<Animal>[]) thing;
+    /** update the key of the item currently at the root */
+    public void updateRootKey(double key) {
         
-        this.maxHeap.clear();
+        if (this.avl.size() == 0) {
+            return;
+        }
         
-        for (int i = 0; i < PQthing.length; i++) {
-            if (PQthing[i].getItem() != carcass) {
-                
-                this.maxHeap.add(PQthing[i]);
-                
+        // remove from avl tree
+        Entry temp = this.avl.getMax();
+        this.avl.remove(temp);
+        // update key
+        temp._val = key;
+        // put back in
+        this.avl.add(temp);
+       // this.animalToKey.replace(temp._animal, temp._val);
+        
+    }
+
+    public int size() {
+        return this.avl.size();
+    }
+    
+    public void add(Animal calf) {
+        
+        if (this.hasMax && (this.avl.size() >= this.maxAnimals)) {
+            this.avl.remove(this.avl.getMin());
+        }
+        
+        Entry temp = new Entry((this.heur.getHeuristic(calf)), calf);
+        this.avl.add(temp);
+       // this.animalToKey.put(temp._animal, temp._val);
+    }
+    
+    /** return all Animals with heuristic value greater or equal to 'd' */
+    public ArrayList<AnimalPQ.Entry> getBest(double d) {
+        // TODO Auto-generated method stub
+        Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
+        Iterator<AnimalPQ.Entry> iter = it.iterator();
+        ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
+        while (iter.hasNext()) {
+            Entry temp = iter.next();
+            if (temp._val >= d) {
+                result.add(temp);
             }
-        }*/
-        
-	}
+        }
+        return result;
+    }
 
-	/**
-	 * Find an animal and update its value.
-	 * @param carcass
-	 */
-	public void update(Animal carcass) {
-	    this.removeAnimal(carcass);
-	    this.add(carcass);
-	    
-	}
-	
-	
+    /** return heuristic value of the root */
+    public double bestVal() {
+        
+        if (this.avl.size() == 0) {
+            return 0;
+        }
+        
+        return this.avl.getMax()._val;
+    }
+
+    public Animal removeRoot() {
+        
+        if (this.avl.size() == 0) {
+            return null;
+        }
+        
+        Entry temp = this.avl.getMax();
+        this.avl.remove(temp);
+        // this.animalToKey.remove(temp._animal);
+        return temp._animal;
+    }
+
+    /** find the carcass and remove it. 
+     * should require a HashMap to find where the animal is
+     * @param carcass
+     */
+    public void removeAnimal(Animal carcass) {
+        // double key = this.animalToKey.get(carcass);
+        Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
+        Iterator<AnimalPQ.Entry> iter = it.iterator();
+        ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
+        this.avl = new AVLTree();
+        while (iter.hasNext()) {
+            Entry temp = iter.next();
+            if (temp._animal != carcass) {
+                this.avl.add(temp);
+            }
+        }
+        
+    }
+
+    /**
+     * Find an animal and update its value.
+     * @param carcass
+     */
+    public void update(Animal carcass) {
+        Iterable<AnimalPQ.Entry> it = this.avl.postOrder();
+        Iterator<AnimalPQ.Entry> iter = it.iterator();
+        ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
+        this.avl = new AVLTree();
+        while (iter.hasNext()) {
+            Entry temp = iter.next();
+            if (temp._animal == carcass) {
+                temp._val = this.heur.getHeuristic(carcass);
+            }
+            this.avl.add(temp);
+        }
+        
+    }
+    
+    
 }
