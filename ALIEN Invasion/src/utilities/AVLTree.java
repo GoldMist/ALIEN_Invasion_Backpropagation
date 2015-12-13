@@ -500,6 +500,21 @@ public class AVLTree<T extends Comparable<? super T>> {
         return temp;
     }
     
+    private BNode findMin(BNode curr) {
+        BNode temp = curr;
+        if (temp == null) {
+            return temp;
+        }
+        while (temp.left != null) {
+            temp = temp.left;
+        }
+        return temp;
+    }
+    
+    public T getMin() {
+        return this.findMin(this.root).data;
+    }
+    
     /**
      * Search from root and find max value.
      * @return the max value

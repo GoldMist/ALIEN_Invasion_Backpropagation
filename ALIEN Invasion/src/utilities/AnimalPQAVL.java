@@ -80,6 +80,11 @@ public class AnimalPQAVL {
     }
     
     public void add(Animal calf) {
+        
+        if (this.hasMax && (this.avl.size() >= this.maxAnimals)) {
+            this.avl.remove(this.avl.getMin());
+        }
+        
         Entry temp = new Entry((this.heur.getHeuristic(calf)), calf);
         this.avl.add(temp);
        // this.animalToKey.put(temp._animal, temp._val);
