@@ -94,7 +94,7 @@ public class AnimalPQ {
 	    PriorityQueue<PQInnerClass<Animal>> tempHeap = this.maxHeap;
 	    ArrayList<AnimalPQ.Entry> result = new ArrayList<AnimalPQ.Entry>();
         
-        while (!this.maxHeap.isEmpty()) {
+        /*while (!this.maxHeap.isEmpty()) {
             
             PQInnerClass<Animal> temp = this.maxHeap.remove();
             if (temp.getPNum() >= d) {
@@ -107,7 +107,9 @@ public class AnimalPQ {
         }
         
         this.maxHeap = tempHeap;
+	    */
 	    
+	    result.add(new Entry(this.maxHeap.peek().getPNum(), this.maxHeap.peek().getItem()));
 		return result;
 	}
 

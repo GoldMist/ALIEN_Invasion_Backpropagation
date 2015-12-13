@@ -175,8 +175,8 @@ public class FFN extends Model {
 			for (Entry<Integer, Double> classification : pat.get(patno)._classification) {
 				tpat.set(classification.getKey(), classification.getValue());
 			}
-			System.out.println("ipat: " + ipat.transpose());
-			System.out.println("tpat: " + tpat.transpose());
+			//System.out.println("ipat: " + ipat.transpose());
+			//System.out.println("tpat: " + tpat.transpose());
 			
 			ArrayList<Matrix> netinput = new ArrayList<Matrix>(_paramLayers+1);
 			ArrayList<Matrix> act = getActivation(ipat, netinput);
@@ -184,12 +184,12 @@ public class FFN extends Model {
 				System.out.println("netinput.get(" + i + ")=...");
 				System.out.print(netinput.get(i));
 				System.out.println("____________________");
-			}*/
+			}
 			for (int i=1; i<_paramLayers+1; i++) {
 				System.out.println("act.get(" + i + ")=...");
 				System.out.print(act.get(i));
 				System.out.println("____________________");
-			}
+			}*/
 			
 			Matrix err = tpat.plus(act.get(_paramLayers), -1);
 			_prevError = tpat.applyAll(_ErrorFunction).sum();

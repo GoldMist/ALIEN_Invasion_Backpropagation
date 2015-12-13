@@ -30,7 +30,7 @@ import functions.*;
 public class Invasion {
 	private static final String DATA_FILE = "xor.data";
 	private static final int MAX_ANIMALS = 1;
-	private static final long RUNTIME_MILLIS = 10000;
+	private static final long RUNTIME_MILLIS = 1000;
 	private static final int[] RAW_FFN_LAYERS = {2, 2, 2};
 	private static ArrayList<Integer> numUnits;
 	
@@ -50,6 +50,7 @@ public class Invasion {
 		long t_start = System.currentTimeMillis();
 		int ep = 0;
 		while (System.currentTimeMillis() - t_start < RUNTIME_MILLIS) {
+			System.out.println("inserting");
 		    master.insertAnimals();
 		    
 			//System.out.println("\n ___--RESULT(" + ep + ")--___\n");
@@ -61,8 +62,10 @@ public class Invasion {
 		    }
 		    
 		    master.step();
+			System.out.println("stepping");
 		    
 		    master.deleteAnimals();
+			System.out.println("deleting");
 		    
 			//System.out.println(myAnimals.getRoot());
 			
