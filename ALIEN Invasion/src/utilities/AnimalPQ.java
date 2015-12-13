@@ -60,6 +60,7 @@ public class AnimalPQ {
      */
     public Animal getRoot() {
         if (this.tree.size() == 0) {
+            System.err.println("AnimalPQ.getRoot(): ROOT IS NULL");
             return null;
         }
         return this.tree.last()._animal;
@@ -97,7 +98,7 @@ public class AnimalPQ {
         
         Entry start = this.tree.ceiling(new Entry(d, null));
         if (start == null) {
-            return null;
+            return new ArrayList<AnimalPQ.Entry>();
         }
         TreeSet<AnimalPQ.Entry> subSet = (TreeSet<Entry>) this.tree.tailSet(start);
         ArrayList<AnimalPQ.Entry> list = new ArrayList<AnimalPQ.Entry>();
@@ -112,6 +113,7 @@ public class AnimalPQ {
     public double bestVal() {
         
         if (this.tree.size() == 0) {
+            System.err.println("AnimalPQ.bestVal(): ROOT IS NULL");
             return 0;
         }
         
@@ -125,6 +127,7 @@ public class AnimalPQ {
     public Animal removeRoot() {
         
         if (this.tree.size() == 0) {
+            System.err.println("AnimalPQ.removeRoot(): ROOT IS NULL");
             return null;
         }
         
