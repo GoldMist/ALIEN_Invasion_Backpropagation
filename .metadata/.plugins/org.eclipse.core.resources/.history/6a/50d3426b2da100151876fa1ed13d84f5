@@ -54,9 +54,7 @@ public class UFO1 extends UFO {
 		for (Spawner spawner : _distributions) {
 			rawDistPs.add(spawner.getWeight());
 		}
-		
-		int dist = 0;
-		
+		int dist;
 		if (_firstSpawn) {
 			_firstSpawn = false;
 			dist = 0;
@@ -77,6 +75,7 @@ public class UFO1 extends UFO {
 					break;
 			}
 		}
+		
 		
 		Animal calf = new Cow(_data, _distributions.get(dist).spawn());
 		calf.step();

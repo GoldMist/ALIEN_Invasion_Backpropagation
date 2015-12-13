@@ -55,27 +55,25 @@ public class UFO1 extends UFO {
 			rawDistPs.add(spawner.getWeight());
 		}
 		
-		int dist = 0;
-		
 		if (_firstSpawn) {
 			_firstSpawn = false;
-			dist = 0;
 		} else {
 			double r = _rand.nextDouble();
 			if (r >= _spawn_rate)
 				return;
-			double Z = 0.0;
-			for (double p : rawDistPs) {
-				Z += p;
-			}
-			
-			r = Z*_rand.nextDouble();
-			dist=0;
-			for (; dist<rawDistPs.size()-1; dist++) {
-				r -= rawDistPs.get(dist);
-				if (r <= 0) 
-					break;
-			}
+		}
+		
+		double Z = 0.0;
+		for (double p : rawDistPs) {
+			Z += p;
+		}
+		
+		double r = Z*_rand.nextDouble();
+		int dist=0;
+		for (; dist<rawDistPs.size()-1; dist++) {
+			r -= rawDistPs.get(dist);
+			if (r <= 0) 
+				break;
 		}
 		
 		Animal calf = new Cow(_data, _distributions.get(dist).spawn());

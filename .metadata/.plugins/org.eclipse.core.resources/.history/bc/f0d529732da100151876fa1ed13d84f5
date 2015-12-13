@@ -78,6 +78,7 @@ public class UFO1 extends UFO {
 			}
 		}
 		
+		
 		Animal calf = new Cow(_data, _distributions.get(dist).spawn());
 		calf.step();
 		this._animalSelector.add(calf);
