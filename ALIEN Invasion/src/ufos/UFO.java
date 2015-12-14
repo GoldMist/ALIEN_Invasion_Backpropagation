@@ -8,6 +8,7 @@ import java.util.Random;
 
 import alien.Animal;
 import alien.Heuristic;
+import alien.Invasion;
 import alien.Model;
 import alien.Model.ModelGenerator;
 import animals.Cow;
@@ -62,10 +63,16 @@ public class UFO {
 	}
 	
 	public void step() {
+		Invasion.println(3, "step-start");
 		Animal mover = _animalSelector.getRoot();
+		Invasion.println(3, "found mover:"+ mover);
+		
 		mover.step();
+		Invasion.println(3, "stepped mover:" + mover);
 		_animalSelector.updateRootKey(_selectorHeuristic.getHeuristic(mover));
+		Invasion.println(3, "updated root key");
 		_animalDeleter.update(mover);
+		Invasion.println(3, "step-end");
 	}
 	
 	public void deleteAnimals() {
