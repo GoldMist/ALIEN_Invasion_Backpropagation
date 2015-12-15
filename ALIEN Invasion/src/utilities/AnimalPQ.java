@@ -28,6 +28,11 @@ public class AnimalPQ {
         @Override
         public int compareTo(Entry o) {
             // TODO Auto-generated method stub
+            
+            if (this._val == o._val) {
+                return -1;
+            }
+            
             return ((Double) this._val).compareTo((Double) o._val);
         }
         
