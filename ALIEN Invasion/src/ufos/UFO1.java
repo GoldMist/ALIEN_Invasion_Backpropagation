@@ -51,7 +51,6 @@ public class UFO1 extends UFO {
 	
 	@Override
 	public void insertAnimals() {
-		Invasion.println(1, "#animals = " + _animalSelector.size());
 		
 		ArrayList<Double> rawDistPs = new ArrayList<Double>();
 		for (Spawner spawner : _distributions) {
@@ -60,7 +59,7 @@ public class UFO1 extends UFO {
 		
 		int dist = 0;
 		
-		if (_firstSpawn) {
+		if (_firstSpawn || _animalSelector.size() <= 0) {
 			_firstSpawn = false;
 			dist = 0;
 		} else {
@@ -81,17 +80,19 @@ public class UFO1 extends UFO {
 			}
 		}
 		
-		dist = 0;
-		
 		Animal calf = new Cow(_data, _distributions.get(dist).spawn());
 		calf.step();
-		this._animalSelector.add(calf);
-		this._animalDeleter.add(calf);
+		System.err.println("pre add new animal");
+		this.addAnimal(calf);
+		System.err.println("post add new animal");
+		Invasion.println(1, "added animal " + this._nextId);
 	}
 	
 	@Override
 	public void deleteAnimals() {
-		
+		if (true) return;
+		if (_animalDeleter.size() <= 1) 
+			return;
 
 		double pDelete = Math.atan(_animalDeleter.size()/100.0);
 		Random rand = new Random();

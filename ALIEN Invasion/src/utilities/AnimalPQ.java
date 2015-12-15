@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import alien.Animal;
 import alien.Heuristic;
+import alien.Invasion;
 
 /**
  * Max Animal PQ.
@@ -17,8 +18,9 @@ public class AnimalPQ {
     public class Entry implements Comparable<Entry>{
         public double _val;
         public Animal _animal;
+        public int _id;
         
-        public Entry(double val, Animal animal) {
+        public Entry(double val, Animal animal, int _id) {
             _val = val;
             _animal = animal;
         }
@@ -68,7 +70,6 @@ public class AnimalPQ {
 
     /** update the key of the item currently at the root */
     public void updateRootKey(double key) {
-        
         if (this.tree.size() == 0) {
             return;
         }
@@ -83,20 +84,27 @@ public class AnimalPQ {
         return this.tree.size();
     }
     
-    public void add(Animal calf) {
+    public void add(Animal calf, int id) {
         
-        if (this.hasMax && (this.tree.size() >= this.maxAnimals)) {
+        /*if (this.hasMax && (this.tree.size() >= this.maxAnimals)) {
             this.tree.pollFirst();
-        }
+        }*/ //TODO: redo for new maxAnimals implementation.
         
-        Entry temp = new Entry((this.heur.getHeuristic(calf)), calf);
+        Entry temp = new Entry((this.heur.getHeuristic(calf)), calf, id);
+        if (this.tree.contains(temp)) {
+        	System.err.println("AnimalPQ.add(Animal,int): NEW ENTRY ALREADY IN TREE");
+        }
+        int t = this.size();
         this.tree.add(temp);
+        if (this.size() != t+1) {
+        	System.err.println("AnimalPQ.add(Animal,int): ADD DOES NOT INCREASE SIZE");
+        }
     }
     
     /** return all Animals with heuristic value greater or equal to 'd' */
     public ArrayList<AnimalPQ.Entry> getBest(double d) {
         
-        Entry start = this.tree.ceiling(new Entry(d, null));
+        Entry start = this.tree.ceiling(new Entry(d, null, -1));
         if (start == null) {
             return new ArrayList<AnimalPQ.Entry>();
         }
@@ -117,7 +125,7 @@ public class AnimalPQ {
             return 0;
         }
         
-        return this.tree.pollLast()._val;
+        return this.tree.last()._val;
     }
 
     /**

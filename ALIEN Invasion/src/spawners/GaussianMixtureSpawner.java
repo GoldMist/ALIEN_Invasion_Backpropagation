@@ -7,6 +7,7 @@ import java.util.function.Function;
 import functions.Identity;
 import utilities.AnimalPQ;
 import alien.Animal;
+import alien.Invasion;
 import alien.Model;
 
 public class GaussianMixtureSpawner extends Spawner {
@@ -46,8 +47,12 @@ public class GaussianMixtureSpawner extends Spawner {
 	public Model spawn() {
 		_hitCount++;
 		double bestHeur = _animals.bestVal();
-		
+
 		ArrayList<AnimalPQ.Entry> bestAnimals = _animals.getBest(bestHeur - Math.log(100)/_lambda);
+		if (Invasion.VERBOSITY >= 2 && bestAnimals.size() == 0) {
+			System.err.println("GaussianMixtureSpawner.spawn(): no best animals!");
+			System.err.println("#animals = " + _animals.size());
+		}
 		
 		double Z = 0.0;
 		ArrayList<Double> rawPs = new ArrayList<Double>(bestAnimals.size());

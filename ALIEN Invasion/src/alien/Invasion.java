@@ -32,14 +32,14 @@ public class Invasion {
 	 * -1: no graph, nothing
 	 *  0: just expected output (like graphs)
 	 *  1: some prints about internal data
-	 *  2: 
+	 *  2: error printing
 	 *  3: debugging prints
 	 */
-	private static final int VERBOSITY = 3;
+	public static final int VERBOSITY = 2;
 	
 	private static final String DATA_FILE = "xor.data";
 	private static final int MAX_ANIMALS = 1;
-	private static final long RUNTIME_MILLIS = 1000;
+	private static final long RUNTIME_MILLIS = 5000;
 	private static final int[] RAW_FFN_LAYERS = {2, 2, 2};
 	private static ArrayList<Integer> numUnits;
 	
@@ -59,7 +59,7 @@ public class Invasion {
 		long t_start = System.currentTimeMillis();
 		int ep = 0;
 		while (System.currentTimeMillis() - t_start < RUNTIME_MILLIS) {
-			System.out.println("inserting");
+			Invasion.println(3, "inserting");
 		    master.insertAnimals();
 		    
 			//System.out.println("\n ___--RESULT(" + ep + ")--___\n");
@@ -70,10 +70,10 @@ public class Invasion {
 		    	y_epochError.add(master.getEpochError());
 		    }
 
-			System.out.println("stepping");
+		    Invasion.println(3, "stepping");
 		    master.step();
 
-			System.out.println("deleting");
+		    Invasion.println(3, "deleting");
 		    master.deleteAnimals();
 		    
 			//System.out.println(myAnimals.getRoot());
@@ -93,7 +93,7 @@ public class Invasion {
         x_time.add(System.currentTimeMillis() - t_start);
         y_epochError.add(myAnimals.getRoot().getEpochError());*/
         
-        PrettyGraph graph = new PrettyGraph(x_time, y_epochError, "UFO"); //myAnimals.getRoot().getType());
+        PrettyGraph graph = new PrettyGraph(x_time, y_epochError, "UFO1"); //myAnimals.getRoot().getType());
         graph.createGraph();
         
 	}
