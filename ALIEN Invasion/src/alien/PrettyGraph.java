@@ -1,5 +1,6 @@
 package alien;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -7,6 +8,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.ChartUtilities; 
 
@@ -38,6 +41,8 @@ public class PrettyGraph
                 PlotOrientation.VERTICAL, 
                 true, true, false);
         
+        XYPlot plot = (XYPlot) xylineChart.getPlot(); 
+        plot.getRenderer().setSeriesPaint(1, new Color(0x00, 0x00, 0xff));
         int width = 1150; /* Width of the image 640*/
         int height = 720; /* Height of the image 480 */ 
         File XYChart = new File( "XYLineChart.jpeg" ); 

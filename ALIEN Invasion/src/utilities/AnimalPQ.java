@@ -20,18 +20,15 @@ public class AnimalPQ {
         public Animal _animal;
         public int _id;
         
-        public Entry(double val, Animal animal, int _id) {
+        public Entry(double val, Animal animal, int id) {
             _val = val;
             _animal = animal;
+            _id = id;
         }
 
         @Override
         public int compareTo(Entry o) {
             // TODO Auto-generated method stub
-            
-            if (this._val == o._val) {
-                return -1;
-            }
             
             return ((Double) this._val).compareTo((Double) o._val);
         }
@@ -40,13 +37,13 @@ public class AnimalPQ {
     
     private Animal _root;
     private Heuristic heur;
-    private TreeSet<AnimalPQ.Entry> tree;
+    private ArrayList<AnimalPQ.Entry> tree;
     private int maxAnimals;
     private boolean hasMax;
 
     
     public AnimalPQ(int maxAnimals, Heuristic heur) {
-        this.tree = new TreeSet<AnimalPQ.Entry>();
+        this.tree = new ArrayList<AnimalPQ.Entry>();
         this.heur = heur;
         this.hasMax = true;
         this.maxAnimals = maxAnimals;
@@ -55,12 +52,20 @@ public class AnimalPQ {
     
     /** Constructor with no maximum #animals */
     public AnimalPQ(Heuristic heur) {
-        this.tree = new TreeSet<AnimalPQ.Entry>();
+        this.tree = new ArrayList<AnimalPQ.Entry>();
         this.heur = heur;
         this.hasMax = false;
         this.maxAnimals = 0;
     }
 
+    public int getRootID() {
+        if (this.tree.size() == 0) {
+            System.err.println("AnimalPQ.getRoot(): ROOT IS NULL");
+            return -1;
+        }
+        return this.tree.get(this.tree.size() - 1)._id;
+    }
+    
     /**
      * Retrieves root but does not remove it.
      * @return the root
@@ -70,7 +75,7 @@ public class AnimalPQ {
             System.err.println("AnimalPQ.getRoot(): ROOT IS NULL");
             return null;
         }
-        return this.tree.last()._animal;
+        return this.tree.get(this.tree.size() - 1)._animal;
     }
 
     /** update the key of the item currently at the root */
@@ -79,9 +84,10 @@ public class AnimalPQ {
             return;
         }
 
-        Entry temp = this.tree.pollLast();
+        Entry temp = this.tree.remove(this.tree.size() - 1);
         temp._val = key;
         this.tree.add(temp);
+        Collections.sort(this.tree);
         
     }
 
@@ -91,35 +97,34 @@ public class AnimalPQ {
     
     public void add(Animal calf, int id) {
         
-        /*if (this.hasMax && (this.tree.size() >= this.maxAnimals)) {
-            this.tree.pollFirst();
-        }*/ //TODO: redo for new maxAnimals implementation.
-        
         Entry temp = new Entry((this.heur.getHeuristic(calf)), calf, id);
-        if (this.tree.contains(temp)) {
-        	System.err.println("AnimalPQ.add(Animal,int): NEW ENTRY ALREADY IN TREE");
-        }
+        
         int t = this.size();
         this.tree.add(temp);
+        Collections.sort(this.tree);
         if (this.size() != t+1) {
         	System.err.println("AnimalPQ.add(Animal,int): ADD DOES NOT INCREASE SIZE");
         }
+       
     }
     
     /** return all Animals with heuristic value greater or equal to 'd' */
     public ArrayList<AnimalPQ.Entry> getBest(double d) {
         
-        Entry start = this.tree.ceiling(new Entry(d, null, -1));
-        if (start == null) {
-            return new ArrayList<AnimalPQ.Entry>();
-        }
-        TreeSet<AnimalPQ.Entry> subSet = (TreeSet<Entry>) this.tree.tailSet(start);
-        ArrayList<AnimalPQ.Entry> list = new ArrayList<AnimalPQ.Entry>();
-        while (!subSet.isEmpty()) {
-            list.add(subSet.pollFirst());
+        ArrayList<AnimalPQ.Entry> smaller = new ArrayList<AnimalPQ.Entry>();
+        Iterator<AnimalPQ.Entry> it = this.tree.iterator();
+        
+                
+        while (it.hasNext()) {
+            AnimalPQ.Entry temp = it.next();
+            if (temp._val >= d) {
+                smaller.add(temp);
+            }
+            
         }
         
-        return list;
+        return smaller;
+        
     }
 
     /** return heuristic value of the root */
@@ -130,7 +135,7 @@ public class AnimalPQ {
             return 0;
         }
         
-        return this.tree.last()._val;
+        return this.tree.get(this.tree.size() - 1)._val;
     }
 
     /**
@@ -144,7 +149,7 @@ public class AnimalPQ {
             return null;
         }
         
-        return this.tree.pollLast()._animal;
+        return this.tree.remove(this.tree.size() - 1)._animal;
 
     }
 
@@ -182,11 +187,37 @@ public class AnimalPQ {
                 iter.remove();
                 curr._val = this.heur.getHeuristic(carcass);
                 this.tree.add(curr);
+                Collections.sort(this.tree);
                 return;
             }
             
         }
         
+        
+    }
+    
+    public String idToString() {
+        String result = "";
+        Iterator<AnimalPQ.Entry> iter = this.tree.iterator();
+        
+        while (iter.hasNext()) {
+            result += iter.next()._id + ", ";
+        }
+        return result;
+    }
+    
+    public void printString() {
+        String result = "";
+        Iterator<AnimalPQ.Entry> iter = this.tree.iterator();
+        
+        System.out.println("STARTING PRINT");
+        while (iter.hasNext()) {
+            AnimalPQ.Entry temp = iter.next();
+            System.out.println(temp._id);
+            System.out.println(this.heur.getHeuristic(temp._animal));
+        }
+        System.out.println("END PRINT");
+       
         
     }
     

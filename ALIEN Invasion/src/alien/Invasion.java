@@ -65,8 +65,8 @@ public class Invasion {
 			//System.out.println("\n ___--RESULT(" + ep + ")--___\n");
 			// x_time.add(System.currentTimeMillis() - t_start);
 		    
-		    if (ep%100 == 0) {
-		    	x_time.add(System.currentTimeMillis() - t_start);
+		    if (ep % 1 == 0) {
+		        x_time.add(System.currentTimeMillis() - t_start);
 		    	y_epochError.add(master.getEpochError());
 		    }
 
@@ -195,7 +195,7 @@ public class Invasion {
 	private static UFO defineUFO() {
 		
 		HashMap<String, Double> selectorParams = new HashMap<String, Double>();
-		selectorParams.put(Heuristic.PARAM_SCALE, -1.0);
+		selectorParams.put(Heuristic.PARAM_SCALE, 1.0);// -1.0);
 		GradientScaledHeuristic selectorHeuristic = new GradientScaledHeuristic(selectorParams);
 		
 		HashMap<String, Double> deleterParams = new HashMap<String, Double>();
@@ -210,7 +210,7 @@ public class Invasion {
 		mode.put(FFN.AFUNCT, new LogisticFunction());
 		ModelGenerator generator = new FFN.FFNGenerator(numUnits, mode);		
 		
-		return new UFO1(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
+		return new UFO(importData(DATA_FILE), selectorHeuristic, deleterHeuristic, generator, MAX_ANIMALS);
 	}
 	
 	public static void println(int verbose_level, String output) {

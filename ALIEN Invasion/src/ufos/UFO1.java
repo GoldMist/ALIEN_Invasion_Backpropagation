@@ -51,7 +51,7 @@ public class UFO1 extends UFO {
 	
 	@Override
 	public void insertAnimals() {
-		
+	    
 		ArrayList<Double> rawDistPs = new ArrayList<Double>();
 		for (Spawner spawner : _distributions) {
 			rawDistPs.add(spawner.getWeight());
@@ -64,7 +64,8 @@ public class UFO1 extends UFO {
 			dist = 0;
 		} else {
 			double r = _rand.nextDouble();
-			if (r >= _spawn_rate)
+			//if (r >= 0)//_spawn_rate)
+			if (_animalSelector.size() >= 2)
 				return;
 			double Z = 0.0;
 			for (double p : rawDistPs) {

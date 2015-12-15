@@ -65,6 +65,9 @@ public class UFO {
 	}
 	
 	public void step() {
+	    
+	    // System.out.println("Selector size: " + _animalSelector.size());
+	    
 		if (Invasion.VERBOSITY >= 2 && _animalSelector.size() <= 0) {
 			System.err.println("UFO.step(): stepping with no animals");
 			return;
@@ -73,10 +76,18 @@ public class UFO {
 		Invasion.println(3, "step-start");
 		Animal mover = _animalSelector.getRoot();
 		Invasion.println(3, "found mover:"+ mover);
+		//System.out.println("all mover ID: " + _animalSelector.idToString());
+		System.out.println("the mover ID: " + _animalSelector.getRootID());
+		// System.out.println("Printing PQ:");
+		// _animalSelector.printString();
+		
 		
 		mover.step();
 		Invasion.println(3, "stepped mover:" + mover);
+		//System.out.println("WHAT WE WANT" + _selectorHeuristic.getHeuristic(mover));
+		//System.out.println("BEFORE UPDATE: " + _animalSelector.bestVal());
 		_animalSelector.updateRootKey(_selectorHeuristic.getHeuristic(mover));
+		//System.out.println("AFTER UPDATE: " + _animalSelector.bestVal());
 		Invasion.println(3, "updated root key");
 		_animalDeleter.update(mover);
 		Invasion.println(3, "step-end");
